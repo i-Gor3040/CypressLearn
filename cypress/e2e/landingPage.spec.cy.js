@@ -20,7 +20,7 @@ describe("Start testing", () => {
       onSignUpPage.enterEmail;
       onSignUpPage.enterPSWD;
       onSignUpPage.clickSignUpBtn; 
-
+      
       //assert
     }); 
   });
