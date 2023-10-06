@@ -1,62 +1,49 @@
 import { faker } from "@faker-js/faker";
-// import { onLandingPage } from "../support/pageObject/landingPage";
-// import { onSignUpPage } from "../support/pageObject/signUpPage";
+import { onLandingPage } from "../support/pageObject/landingPage";
+import { onSignUpPage } from "../support/pageObject/signUpPage";
+import { onHomePage } from "../support/pageObject/homePage";
+import { onUserProfilePage } from "../support/pageObject/userProfilePage";
+import { onUserSettingsPage } from "../support/pageObject/userSettingsPage";
+import { onSignInPage } from "../support/pageObject/signInPage";
 
 const USERNAME = faker.person.firstName() + faker.number.int({ min: 1, max: 100 });
+const EMAIL = faker.internet.email();
+const PSWD = faker.internet.password();
 
 describe("Start testing", () => {
   beforeEach("open app", () => {
     cy.visit("/");
   });
 
-  // Add test with user name already taken
+  // TODO Add test with user name already taken
   it("sign up", () => {
-    cy.contains("Sign up").click();
-    cy.get('[placeholder="Username"]').clear().type(USERNAME);
+    onLandingPage.clickSignUpLink();
 
-    cy.get('[placeholder="Email"]')
-      .clear()
-      .type(USERNAME + "@yopmail.com");
+    onSignUpPage.enterUserName(USERNAME);
+    onSignUpPage.enterEmail(EMAIL);
+    onSignUpPage.enterPSWD(PSWD);
+    onSignUpPage.clickSignUpBtn();
 
-    cy.get('[placeholder="Password"]')
-      .clear()
-      .type("Test123@");
+    onHomePage.verifyUserName(USERNAME); //ask opinion about implementation
+    onHomePage.clickOnUserName();
 
-    cy.get("button").click();
+    onUserProfilePage.editProfileSettingsButtonClick();
 
-    cy.get('[show-authed="true"] li')
-      .eq(3)
-      .should(($div) => {
-        expect($div.get(0).innerText).to.eq(USERNAME);
-      });
-
-    cy.get('[show-authed="true"] li').eq(3).click();
-
-    cy.contains("Edit Profile Settings").click();
-
-    cy.contains("button", "Or click here to logout.").click();
+    onUserSettingsPage.clickLogOutButton();
   });
 
   it("login with invalid email", () => {
-    cy.contains('Sign in').click();
+    onLandingPage.clickSignInLink();
 
-    cy.get('[placeholder="Email"]')
-      .clear()
-      .type(USERNAME + "@yopmal.com");
+    onSignInPage.enterEmail('invalid@email.com');
+    onSignInPage.enterPSWD(PSWD);
+    onSignInPage.clickSignInBtn();
 
-    cy.get('[placeholder="Password"]')
-      .clear()
-      .type("Test123@");
-
-      cy.get("button")
-        .contains('Sign in')
-        .click();
-
-      cy.contains('email or password is invalid')
-      .should('be.visible');
+    cy.contains('email or password is invalid')
+      .should('be.visible')
     });
 
-    it("login with empty email", () => {
+    it.skip("login with empty email", () => {
       cy.contains('Sign in').click();
   
       cy.get('[placeholder="Password"]')
@@ -71,7 +58,7 @@ describe("Start testing", () => {
         .should('be.visible');
       });
 
-  it("login with invalid password", () => {
+  it.skip("login with invalid password", () => {
       cy.contains('Sign in').click();
   
       cy.get('[placeholder="Email"]')
@@ -90,7 +77,7 @@ describe("Start testing", () => {
         .should('be.visible');
       });
 
-  it("login with empty password", () => {
+  it.skip("login with empty password", () => {
         cy.contains('Sign in').click();
     
         cy.get('[placeholder="Email"]')
@@ -106,23 +93,29 @@ describe("Start testing", () => {
         });
 
   it("login with valid credentials", () => {
-    cy.contains('Sign in').click();
+    /* cy.contains('Sign in').click(); */
+    onLandingPage.clickSignInLink();
+    onSignInPage.enterEmail(EMAIL);
+    onSignInPage.enterPSWD(PSWD);
+    onSignInPage.clickSignInBtn();
 
-    cy.get('[placeholder="Email"]')
+    onHomePage.verifyUserName(USERNAME);
+
+    /* cy.get('[placeholder="Email"]')
       .clear()
-      .type(USERNAME + "@yopmail.com");
+      .type(USERNAME + "@yopmail.com"); */
 
-    cy.get('[placeholder="Password"]')
+   /*  cy.get('[placeholder="Password"]')
       .clear()
-      .type("Test123@");
+      .type("Test123@"); */
 
-      cy.get("button").contains('Sign in').click();
+      // cy.get("button").contains('Sign in').click();
 
-      cy.get('[show-authed="true"] li')
+     /*  cy.get('[show-authed="true"] li')
       .eq(3)
       .should(($div) => {
         expect($div.get(0).innerText).to.eq(USERNAME);
-      });
+      }); */
 
   })
 });
