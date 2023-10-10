@@ -1,7 +1,9 @@
 export class SignUpPage {
 
+    userNameInput = '[placeholder="Username"]';
+
     enterUserName(userName) {
-        cy.get('[placeholder="Username"]').clear().type(userName);
+        cy.get(this.userNameInput).clear().type(userName);
     }
     enterEmail(email) {
         cy.get('[placeholder="Email"]').clear().type(email);

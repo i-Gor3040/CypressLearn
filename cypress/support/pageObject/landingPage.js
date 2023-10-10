@@ -1,13 +1,18 @@
 export class LandingPage {
+  openBasePage() {
+    cy.visit("/");
+  }
 
   clickSignUpLink() {
     cy.contains("Sign up").click();
-    //return this; 
   }
 
   clickSignInLink() {
     cy.contains("Sign in").click();
-    //return this; 
+  }
+
+  getSignInLink() {
+    return cy.contains("Sign in");
   }
 }
 
