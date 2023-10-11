@@ -1,19 +1,20 @@
 export class SignUpPage {
 
-    enterUserName() {
-        cy.get('[placeholder="Username"]').clear().type('Igor'); // 1) move to fixures or use faker; 2) what if username is taken?
-    }
-    enterEmail() {
-        cy.get('[placeholder="Email"]').clear().type('igor@yopmail.com'); // move to fixures
-    }
+    userNameInput = '[placeholder="Username"]';
 
-    enterPSWD() {
-        cy.get('[placeholder="Password"]').clear().type('Test123@'); // move to fixures
+    enterUserName(userName) {
+        cy.get(this.userNameInput).clear().type(userName);
+    }
+    enterEmail(email) {
+        cy.get('[placeholder="Email"]').clear().type(email);
+    }
+    enterPSWD(password) {
+        cy.get('[placeholder="Password"]').clear().type(password);
     }
 
     clickSignUpBtn() {
-      cy.contains("Sign up").click();
+      cy.get('button').click();
     }
-  }
+}
   
   export const onSignUpPage = new SignUpPage();
