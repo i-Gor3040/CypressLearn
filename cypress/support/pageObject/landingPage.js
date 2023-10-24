@@ -1,30 +1,46 @@
 export class LandingPage {
-  /* interceptCall(NAME, METHOD, URL, STATUSCODE) {
-    cy.intercept({
-      method: METHOD, // "GET"
-      url: URL, // "https://api.realworld.io/api/tags"
-    }).as(NAME); // "Popular Tags"
-    cy.wait(`@${NAME}`).then(({response}) => {
-      console.log(response.body)
-      expect(response.statusCode).to.eq(STATUSCODE)
-      expect(response.body).to.have.property("tags")
-      console.log(response.body.tags)
-    })
-  }
- */
 
-  interceptAndMockCall(name, method, url, statusCode, obj) {
-    cy.intercept({
-      method: method,
-      url: url},
+  interceptAndMockCallTags(name, method, url, statusCode, obj) {
+    cy.intercept(
+      {
+        method: method,
+        url: url,
+      },
       (req) => {
-      req.reply({
-        statusCode: statusCode,
-        body: obj,
-      });
-    }).as(name);
+        req.reply({
+          statusCode: statusCode,
+          body: obj,
+        });
+      }
+    ).as(name);
+
+    cy.wait(`@${name}`).then(({ response }) => {
+      expect(response.statusCode).to.eq(statusCode);
+      expect(response.body).to.have.property(`${name}`);
+      expect(response.body.tags).to.deep.equal(obj.tags)
+    });
   }
 
+  interceptAndMockCallArticles(name, method, url, statusCode, obj) {
+    cy.intercept(
+      {
+        method: method,
+        url: url,
+      },
+      (req) => {
+        req.reply({
+          statusCode: statusCode,
+          body: obj,
+        });
+      }
+    ).as(name);
+
+    cy.wait(`@${name}`).then(({ response }) => {
+      expect(response.statusCode).to.eq(statusCode);
+      expect(response.body).to.have.property(`${name}`);
+      expect(response.body.articles).to.deep.equal(obj.articles)
+    });
+  }
   openBasePage() {
     cy.visit("/");
   }
