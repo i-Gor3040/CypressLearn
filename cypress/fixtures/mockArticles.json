@@ -1,0 +1,22 @@
+{
+    "articles":[
+    {
+    "title":"Hello World!",
+    "slug":"Hi - cypress.io",
+    "body":"cypress.io",
+    "description":"Cypress Quality Summit 2023",
+     "tagList": ["Warsaw", "Krakow", "Lodz"],
+    "createdAt":"2023-10-29T03:18:26.635Z",
+    "updatedAt":"2023-10-29T03:18:26.635Z",
+    "author":{
+    "username":"Carter Capocaccia",
+    "bio":null,
+    "image":"https://static.productionready.io/images/smiley-cyrus.jpg",
+    "following":false
+    },
+    "favorited":false,
+    "favoritesCount":666
+    }
+    ],
+    "articlesCount":33
+    }

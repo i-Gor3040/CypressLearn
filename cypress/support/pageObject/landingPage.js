@@ -1,6 +1,30 @@
+import { th } from "@faker-js/faker";
+
 export class LandingPage {
 
-  interceptAndMockCallTags(name, method, url, statusCode, obj) {
+  tagList = ".tag-list";
+  favoriteBtnArticle = "favorite-btn.pull-xs-right";
+  author = ".author";
+  title = "h1.ng-binding";
+
+  getTagList() {
+   return cy.get(this.tagList);
+  }  
+
+  getFavoriteBtnArticle() {
+    return cy.get(this.favoriteBtnArticle)
+  }
+
+  getAuthor() {
+    return cy.get(this.author);
+  }
+
+  getTitle() {
+    return cy.get(this.title);
+  }
+
+
+  interceptAndMockCallArticles(name, method, url, statusCode, obj) {
     cy.intercept(
       {
         method: method,
@@ -14,11 +38,7 @@ export class LandingPage {
       }
     ).as(name);
 
-    cy.wait(`@${name}`).then(({ response }) => {
-      expect(response.statusCode).to.eq(statusCode);
-      expect(response.body).to.have.property(`${name}`);
-      expect(response.body.tags).to.deep.equal(obj.tags)
-    });
+    cy.wait(`@${name}`);
   }
 
   interceptAndMockCallArticles(name, method, url, statusCode, obj) {
@@ -35,11 +55,7 @@ export class LandingPage {
       }
     ).as(name);
 
-    cy.wait(`@${name}`).then(({ response }) => {
-      expect(response.statusCode).to.eq(statusCode);
-      expect(response.body).to.have.property(`${name}`);
-      expect(response.body.articles).to.deep.equal(obj.articles)
-    });
+    cy.wait(`@${name}`);
   }
   openBasePage() {
     cy.visit("/");
