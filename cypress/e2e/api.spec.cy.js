@@ -1,48 +1,53 @@
 /// <reference types="cypress" />
 import { onLandingPage } from "../support/pageObject/landingPage";
+import tags from "../fixtures/mockTags.json"
+import articles from "../fixtures/mockArticles.json"
 
-let NAME;
-let METHOD;
-let URL;
-let STATUSCODE;
+let name;
+let method;
+let url;
+let statusCode;
+let obj;
 
-describe("API intercept", () => {
+describe("API Mocking using intercept", () => {
   beforeEach("open app", () => {
     cy.log("opening web page");
     onLandingPage.openBasePage();
   });
 
-  it("Tags request", () => {
-    NAME = "Popular Tags";
-    METHOD = "GET";
-    URL = "https://api.realworld.io/api/tags";
-    STATUSCODE = 200;
+   it("Tags mock", () => {
+    name = "tags";
+    method = "GET";
+    url = "https://api.realworld.io/api/tags";
+    statusCode = 202;
+    obj = tags;
 
-    onLandingPage.interceptCall(NAME, METHOD, URL, STATUSCODE)
+    onLandingPage.interceptAndMockCallArticles(name, method, url, statusCode, obj);
+    cy.log("verifying mock values are displayed in Tags");
+    onLandingPage.getTagList()
+    .should("contain", "Warsaw")
+    .and("contain", "Krakow")
+    .and("contain", "Lodz")
+    .and("contain", "Wroclaw");
   });
 
-  it("Articles request", () => {
-    NAME = "Articles";
-    METHOD = "GET";
-    URL = "https://api.realworld.io/api/articles?limit=10&offset=0";
-    STATUSCODE = 200;
+  it("Articles mock", () => {
+    name = "articles";
+    method = "GET";
+    url = "https://api.realworld.io/api/articles?limit=10&offset=0";
+    statusCode = 200;
+    obj = articles;
 
-    onLandingPage.interceptCall(NAME, METHOD, URL, STATUSCODE)
+    onLandingPage.interceptAndMockCallArticles(name, method, url, statusCode, obj);
+    cy.log("verifying mocked author is displayed");
+    onLandingPage.getAuthor()
+    .should("contain", "Carter Capocaccia");
+    cy.log("verifying mocked number of favorites is displayed");
+    onLandingPage.getFavoriteBtnArticle()
+    .should("contain", "666");
+    cy.log("verifying mocked title is displayed");
+    onLandingPage.getTitle()
+    .contains("Hello World!");
   });
 
-  /* it("Tags request", () => {
-    cy.intercept({
-      method: "GET",
-      url: "https://api.realworld.io/api/tags",
-    }).as("Popular Tags");
-    cy.wait("@Popular Tags").its("response.statusCode").should("eq", 200);
-  });
-
-  it("Articles request", () => {
-    cy.intercept({
-      method: "GET",
-      url: "https://api.realworld.io/api/articles?limit=10&offset=0",
-    }).as("Articles");
-    cy.wait("@Articles").its("response.statusCode").should("eq", 200);
-  }); */
 });

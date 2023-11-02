@@ -1,12 +1,60 @@
 export class LandingPage {
-  interceptCall(NAME, METHOD, URL, STATUSCODE) {
-    cy.intercept({
-      method: METHOD, // "GET"
-      url: URL, // "https://api.realworld.io/api/tags"
-    }).as(NAME); // "Popular Tags"
-    cy.wait(`@${NAME}`).its("response.statusCode").should("eq", STATUSCODE);
+
+  tagList = ".tag-list";
+  favoriteBtnArticle = "favorite-btn.pull-xs-right";
+  author = ".author";
+  title = "h1.ng-binding";
+
+  getTagList() {
+   return cy.get(this.tagList);
+  }  
+
+  getFavoriteBtnArticle() {
+    return cy.get(this.favoriteBtnArticle)
   }
 
+  getAuthor() {
+    return cy.get(this.author);
+  }
+
+  getTitle() {
+    return cy.get(this.title);
+  }
+
+
+  interceptAndMockCallArticles(name, method, url, statusCode, obj) {
+    cy.intercept(
+      {
+        method: method,
+        url: url,
+      },
+      (req) => {
+        req.reply({
+          statusCode: statusCode,
+          body: obj,
+        });
+      }
+    ).as(name);
+
+    cy.wait(`@${name}`);
+  }
+
+  interceptAndMockCallArticles(name, method, url, statusCode, obj) {
+    cy.intercept(
+      {
+        method: method,
+        url: url,
+      },
+      (req) => {
+        req.reply({
+          statusCode: statusCode,
+          body: obj,
+        });
+      }
+    ).as(name);
+
+    cy.wait(`@${name}`);
+  }
   openBasePage() {
     cy.visit("/");
   }
